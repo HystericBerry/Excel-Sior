@@ -20,7 +20,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.geometry.Insets;
-
+import javafx.scene.layout.*;
+import javafx.scene.layout.Background;
+//import javafx.scene.layout.BackgroundRepeat;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -37,6 +39,7 @@ import java.util.Scanner;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -64,10 +67,30 @@ public class ExcelSior extends Application{
     
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		primaryStage.getIcons().add(new Image("Excel-Sior_Logo.png"));
     	primaryStage.setTitle("Excel-Sior");
     	gradeBook = new GradeBook();
     	
     	BorderPane root = new BorderPane();
+    	
+    	
+    	//Image image = new Image(ExcelSior.class.getResource("rsc/Excel-Sior.jpg"));
+    	//String path = new File("").getAbsolutePath();
+    	//System.out.println(path);
+    	//path += "\\rsc\\Excel-Sior.jpg";
+    	//rsc/Excel-Sior.jpg
+    	
+    	//Image img = new Image(getClass().getResourceAsStream("file:/Excel-Sior/rsc/Excel-Sior.jpg"));
+    	
+    	
+    	//String image = ExcelSior.class.getResource("Excel-Sior/rsc/Excel-Sior.jpg").toExternalForm();
+    	
+    	ImageView img = new ImageView("Excel-Sior.png");
+    	//img.setPreserveRatio(true);
+    	img.fitWidthProperty().bind(primaryStage.widthProperty());
+    	img.fitHeightProperty().bind(primaryStage.heightProperty());
+    	root.getChildren().add(img);
+    	
     	VBox topContainer = new VBox();
     	
     	//Defining the Menu Bar
@@ -75,13 +98,22 @@ public class ExcelSior extends Application{
         menuBar.prefWidthProperty().bind(primaryStage.widthProperty());
     	topContainer.getChildren().add(menuBar);
     	
-    	Scene scene = new Scene(root, 900, 600, Color.WHITE);
+    	Scene scene = new Scene(root, 1000, 550, Color.WHITE);
     	root.setTop(topContainer);
     	
         
     	//VBox center = generateCenter();
     	GridPane center = generateGridPane();
     	root.setCenter(center);
+    	
+    	
+    	//root.getCenter().setStyle("-fx-background-image: url(\"/Excel-Sior/rsc/Excel-Sior.jpg\");"
+    			//+ "-fx-background-size: 500, 500;-fx-background-repeat: no-repeat;");
+    	//
+    	
+//    	root.setStyle("-fx-background-image: url(\"images/Excel-Sior.png\"); "
+//    			+ "-fx-background-position: center center; " 
+//    			+ "-fx-background-repeat: stretch;"); // stretch
     	
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -99,52 +131,19 @@ public class ExcelSior extends Application{
 		return generate;
 	}
 	
-	static VBox generateCenter() {
-		VBox box = new VBox();
-		box.setSpacing(10);
-		box.setPadding(new Insets(0, 20, 10, 20));
-    	//Defining the Name text field
-    	final TextField nameField = new TextField();
-    	nameField.setPromptText("Enter grade category name.");
-    	nameField.setPrefColumnCount(10);
-    	nameField.getText();
-    	GridPane.setConstraints(nameField, 0, 0);
-    	box.getChildren().add(nameField);
-    	//Defining the Last Name text field
-    	final TextField weightField = new TextField();
-    	weightField.setPromptText("Enter grade category weight.");
-    	box.getChildren().add(weightField);
-    	//Defining the Comment text field
-    	final TextField numActField = new TextField();
-    	numActField.setPrefColumnCount(15);
-    	numActField.setPromptText("Enter # of assignments/ activities.");
-    	box.getChildren().add(numActField);
-    	//Defining the Label text field
-		final TextArea console = new TextArea();
-		GridPane.setConstraints(console, 0, 3);
-		GridPane.setColumnSpan(console, 2);
-		box.getChildren().add(console);
-    	//Defining the Submit button
-    	Button submit = generateAddButton(console, nameField, weightField, numActField);
-    	box.getChildren().add(submit);
-    	//Defining the Clear button
-    	Button clear = generateClearButton(console, nameField, weightField, numActField);
-    	GridPane.setConstraints(clear, 1, 1);
-    	box.getChildren().add(clear);
-    	return box;
-	}
+	
 	
 	
 	
 	static GridPane generateGridPane() {
 		GridPane grid = new GridPane();
-    	grid.setPadding(new Insets(10, 10, 10, 10)); // 10
+    	grid.setPadding(new Insets(20, 20, 20, 20)); // 10
     	grid.setVgap(5);
     	grid.setHgap(5);
     	//Defining the Name text field
     	final TextField nameField = new TextField();
     	nameField.setPromptText("Enter grade category name.");
-    	nameField.setPrefColumnCount(10);
+    	nameField.setPrefColumnCount(20);
     	nameField.getText();
     	GridPane.setConstraints(nameField, 0, 0);
     	grid.getChildren().add(nameField);
@@ -155,7 +154,7 @@ public class ExcelSior extends Application{
     	grid.getChildren().add(weightField);
     	//Defining the Comment text field
     	final TextField numActField = new TextField();
-    	numActField.setPrefColumnCount(15);
+    	numActField.setPrefColumnCount(20);
     	numActField.setPromptText("Enter # of assignments/ activities.");
     	GridPane.setConstraints(numActField, 0, 2);
     	grid.getChildren().add(numActField);
@@ -163,7 +162,7 @@ public class ExcelSior extends Application{
     	TextArea console = addConsole(grid);
     	
     	final TextField pathField = new TextField();
-    	pathField.setPrefColumnCount(15);
+    	pathField.setPrefColumnCount(20);
     	pathField.setPromptText("Enter directory to output Excel file.");
     	GridPane.setConstraints(pathField, 0, 8);
     	grid.getChildren().add(pathField);
@@ -183,6 +182,8 @@ public class ExcelSior extends Application{
     	return grid;
 	}
 	
+	
+	
 	static TextArea addConsole(GridPane grid){
 		//Defining the Label text field
     	final Label label = new Label();
@@ -192,6 +193,8 @@ public class ExcelSior extends Application{
     	
     	//Defining the Console text area
     	final TextArea console = new TextArea();
+		console.setEditable(false);
+		console.setFocusTraversable(false);
     	console.setPrefRowCount(10);
     	console.setPrefColumnCount(100);
     	console.setWrapText(true);
@@ -220,6 +223,8 @@ public class ExcelSior extends Application{
 		return clear;
 	}
 	
+	
+	
 	// Change later to a "submit" button
 	static Button generateAddButton(TextArea console, TextField nameField, 
 			TextField weightField, TextField numActField) {
@@ -234,15 +239,17 @@ public class ExcelSior extends Application{
             	
             	try {
             		weight = Double.parseDouble(weightField.getText());
+            		if(weight <= 0.0) throw new NumberFormatException();
             	} catch(NumberFormatException e) {
-            		msg.append("Error:\n");
+            		msg.append("Weight Input Error:\n");
             		msg.append(weightField.getText());
             		msg.append(" is not a valid input.\n");
             	}
             	try {
             		numAssign = Integer.parseInt(numActField.getText());
+            		if(numAssign < 1) throw new NumberFormatException();
             	} catch(NumberFormatException e) {
-            		msg.append("Error:\n");
+            		msg.append("# Assignment Input Error:\n");
             		msg.append(numActField.getText());
             		msg.append(" is not a valid input.\n");
             	}
@@ -250,9 +257,9 @@ public class ExcelSior extends Application{
             	if(msg.length() == 0) {
             		gradeBook.generateCategorySheets(nameField.getText(), weight, numAssign);
             		msg.append("Successfully Added Category:");
-            		msg.append("\n\t(Name):\t");
+            		msg.append("\n\t(Name):\t\t\t");
             		msg.append(nameField.getText());
-            		msg.append("\n\t(Weight):\t");
+            		msg.append("\n\t(Weight):\t\t\t");
             		msg.append(weight);
             		msg.append("\n\t(# Assignments):\t");
             		msg.append(numAssign);
@@ -319,10 +326,6 @@ public class ExcelSior extends Application{
         
         return file;
 	}
-    
-    
-	
-    
     
     
     
