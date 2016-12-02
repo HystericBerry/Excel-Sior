@@ -2,7 +2,7 @@ import java.util.LinkedList;
 
 public class Rubric {
 	
-	public void addCategory(double weight, String name, int numAssignments) {
+	public void addCategory(String name, double weight, int numAssignments) {
 		Category c = new Category(name, weight, numAssignments);
 		_categories.add(c);
 	}
