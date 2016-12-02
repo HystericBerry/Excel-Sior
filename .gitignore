@@ -3,12 +3,11 @@
 *.project
 bin/
 
-# Compiled source #
-###################
+# Compiled source (.exe) #
+##########################
 *.com
 *.class
 *.dll
-*.exe
 *.o
 *.so
 
