@@ -15,15 +15,22 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.layout.VBox;
+import javafx.scene.Group;
+import javafx.scene.layout.Pane;
 
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 
 
 import java.util.Scanner;
@@ -32,8 +39,6 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.awt.Menu;
-import java.awt.MenuBar;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -46,8 +51,9 @@ import java.io.IOException;
  *
  * @author Yegor Kozlov
  */
+@SuppressWarnings("restriction")
 public class ExcelSior extends Application{
-	private static final int CAPACITY = 100, ROW_OFFSET = 6, COL_OFFSET = 2, GEN_OFFSET = 4;
+	static final int CAPACITY = 100, ROW_OFFSET = 6, COL_OFFSET = 2, GEN_OFFSET = 4;
 	
 	/**
 	 * This excel spreadsheet generator needs to have the following comprehensive features:
@@ -59,28 +65,95 @@ public class ExcelSior extends Application{
     	launch(args);
     }
     
-    
 	@Override
 	@SuppressWarnings("restriction")
 	public void start(Stage primaryStage) throws Exception {
-		// TODO Auto-generated method stub
-    	primaryStage.setTitle("Hello World!");
-        Button btn = new Button();
-        btn.setText("Create new Excel grade sheet");
-        btn.setOnAction(new EventHandler<ActionEvent>() {
+    	primaryStage.setTitle("Excel-Sior");
+    	
+        VBox box = new VBox();
+        Group group = new Group();
+        Scene scene = new Scene(box, 900, 600, Color.WHITE);
+        
+        MenuBar menuBar = generateMenuBar();
+        menuBar.prefWidthProperty().bind(primaryStage.widthProperty());
+        group.getChildren().add(menuBar); 
+        
+        box.getChildren().add(group);
+        
+        
+    	Button create = generateCreateButton();
+    	create.setLayoutX(200);
+    	create.setLayoutX(200);
+    	box.getChildren().add(create);
+        
+        
+        primaryStage.setScene(scene);
+        primaryStage.show();
+	}
+	
+	// Change later to a "submit" button
+	static Button generateCreateButton() {
+		Button create = new Button();
+    	create.setText("Create new Excel grade sheet");
+    	create.setOnAction(new EventHandler<ActionEvent>() {
  
             @Override
             public void handle(ActionEvent event) {
             	System.out.println(event.toString());
-                System.out.println("Hello World!");
+                System.out.println("Create new Excel Spreadsheet!");
+                createNewExcelWorkbook();
             }
         });
+		return create;
+	}
+	
+	
+	static MenuBar generateMenuBar() {
+		MenuBar menuBar = new MenuBar();
+		final Menu file = generateFileMenu();
+		final Menu options = generateOptionsMenu();
+        // MenuItem setting = new MenuItem("setting");
+        final Menu help = new Menu("Help");
         
         
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
-        primaryStage.setScene(new Scene(root, 300, 250));
-        primaryStage.show();
+        menuBar.getMenus().add(file);
+        menuBar.getMenus().add(options);
+        menuBar.getMenus().add(help);
+		return menuBar;
+	}
+	
+	static Menu generateOptionsMenu() {
+		Menu options = new Menu("Options");
+		MenuItem settings = new MenuItem("Settings");
+		
+		/* CURRENTLY HAS NO FUNCTIONALITY
+		 * THIS IS WHERE THE USER CAN SPECIFY THE DEFAULT OUTPUT DIRECTORY
+		options.getItems().add(settings);
+        settings.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                System.exit(0);
+            }
+        });*/
+        options.getItems().add(settings);
+        
+        return options;
+	}
+	
+	static Menu generateFileMenu() {
+		Menu file = new Menu("File");
+		file.getItems().add(new MenuItem("Save"));
+		file.getItems().add(new MenuItem("Open"));
+		file.getItems().add(new SeparatorMenuItem());
+        
+        MenuItem exit = new MenuItem("Exit");
+        exit.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+        file.getItems().add(exit);
+        
+        return file;
 	}
     
     
