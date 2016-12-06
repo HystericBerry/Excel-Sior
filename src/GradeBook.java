@@ -74,15 +74,18 @@ public class GradeBook {
     			Cell currPercent = row.getCell(COL_OFFSET+category.getNumAssign()+2); // 2nd to last col
     			Cell currGrade = row.getCell(COL_OFFSET+category.getNumAssign()+3); // last col
         		
-    			// e.g. Homework!L4
-    			perFormula.append(category.getName());
-    			perFormula.append('!');
-    			perFormula.append(currPercent.getAddress().formatAsString());
+    			// e.g. IF(ISNUMBER(Homework!L4), Homework!L4, 0)
+    			String cellAddr = category.getName()+"!"+
+    					currPercent.getAddress().formatAsString();
+    			perFormula.append("IF(ISNUMBER(");
+    			perFormula.append(cellAddr);
+    			perFormula.append("),");
+    			perFormula.append(cellAddr);
+    			perFormula.append(",0)");
     			
     			// e.g. IF(ISNUMBER(Homework!J4), Homework!J4, 0)
-    			String cellAddr = category.getName()+"!"+
-    			currGrade.getAddress().formatAsString();
-    			
+    			cellAddr = category.getName()+"!"+
+    					currGrade.getAddress().formatAsString();
     			gradeFormula.append("IF(ISNUMBER(");
     			gradeFormula.append(cellAddr);
     			gradeFormula.append("),");
